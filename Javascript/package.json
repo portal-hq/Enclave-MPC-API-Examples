@@ -1,0 +1,34 @@
+{
+  "name": "js-example",
+  "version": "1.0.0",
+  "description": "This is the JS example of interacting with Portal's MPC Signer API",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js",
+    "signup": "node -e 'require(\"./signup.js\")().catch(console.error)'",
+    "generate": "node -e 'require(\"./generate.js\")().catch(console.error)'",
+    "backup": "node -e 'require(\"./backup.js\")().catch(console.error)'",
+    "recover": "node -e 'require(\"./recover.js\")().catch(console.error)'",
+    "signeth": "node -e 'require(\"./eth-sign.js\")().catch(console.error)'",
+    "signsol": "node -e 'require(\"./sol-sign.js\").SignSol(\"\").catch(console.error)'",
+    "cosignsol": "node -e 'require(\"./sol-sign.js\").CoSignTransaction().catch(console.error)'",
+    "lint": "eslint . --fix",
+    "format": "prettier --write ."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@solana/web3.js": "^1.93.2",
+    "axios": "^1.7.2",
+    "dotenv": "^16.4.5",
+    "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.5.0",
+    "eslint": "9.x",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "globals": "^15.6.0",
+    "prettier": "^3.3.2"
+  }
+}

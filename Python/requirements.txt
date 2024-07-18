@@ -1,0 +1,5 @@
+python-dotenv
+requests
+uuid
+aiohttp
+solana
