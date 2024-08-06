@@ -22,7 +22,10 @@ async function main() {
   await SignEth();
 
   // Sign a Solana transaction
-  await solana.SignSol("");
+  await solana.SignSol('');
+
+  // Sign a Solana message
+  await solana.SignSolMessage('sign this message');
 
   // Co-sign a Solana transaction
   await solana.CoSignTransaction();
