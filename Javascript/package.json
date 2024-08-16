@@ -14,6 +14,7 @@
     "signsolMessage": "node -e 'require(\"./sol-sign.js\").SignSolMessage(\"sign this\").catch(console.error)'",
     "cosignsol": "node -e 'require(\"./sol-sign.js\").CoSignTransaction().catch(console.error)'",
     "stellar": "node -e 'require(\"./stellar.js\").SignStellar().catch(console.error)'",
+    "signtron": "node -e 'require(\"./tron.js\").SignTron().catch(console.error)'",
     "lint": "eslint . --fix",
     "format": "prettier --write ."
   },
