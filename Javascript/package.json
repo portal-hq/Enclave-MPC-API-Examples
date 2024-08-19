@@ -20,7 +20,7 @@
   "license": "ISC",
   "dependencies": {
     "@solana/web3.js": "^1.93.2",
-    "axios": "^1.7.2",
+    "axios": "^1.7.4",
     "dotenv": "^16.4.5",
     "tweetnacl": "^1.0.3",
     "tweetnacl-util": "^0.15.1",
