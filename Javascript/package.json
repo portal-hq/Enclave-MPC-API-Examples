@@ -13,15 +13,21 @@
     "signsol": "node -e 'require(\"./sol-sign.js\").SignSol(\"\").catch(console.error)'",
     "signsolMessage": "node -e 'require(\"./sol-sign.js\").SignSolMessage(\"sign this\").catch(console.error)'",
     "cosignsol": "node -e 'require(\"./sol-sign.js\").CoSignTransaction().catch(console.error)'",
+    "stellar": "node -e 'require(\"./stellar.js\").SignStellar().catch(console.error)'",
     "lint": "eslint . --fix",
     "format": "prettier --write ."
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@noble/secp256k1": "^1.7.1",
     "@solana/web3.js": "^1.93.2",
-    "axios": "^1.7.4",
+    "@stellar/stellar-sdk": "^12.2.0",
+    "axios": "^1.7.2",
+    "crc": "^4.3.2",
     "dotenv": "^16.4.5",
+    "stellar-sdk": "^12.2.0",
+    "tronweb": "^6.0.0-beta.4",
     "tweetnacl": "^1.0.3",
     "tweetnacl-util": "^0.15.1",
     "uuid": "^10.0.0"
