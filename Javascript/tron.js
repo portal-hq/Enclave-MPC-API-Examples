@@ -28,22 +28,23 @@ async function SignTron() {
     console.error('Failed to get client info:', meResponse.data);
     return;
   }
+  // Get the Tron address from the Ethereum address
+  const ethAddress = meResponse.data.metadata.namespaces.eip155.address;
+  const tronHexAddress = '41' + ethAddress.substring(2)
+  const tronAddress = tnw.TronWeb.address.fromHex(tronHexAddress)
   // Setup simple transaction
-  const tronAddress = meResponse.data.metadata.namespaces.tron.address;
   const tronWeb = new tnw.TronWeb({
     fullHost: 'https://nile.trongrid.io',
     headers: { 'TRON-PRO-API-KEY': '' }
   });
   console.log(`Tron Address: ${tronAddress}`);
   const fromTronHexAddress = tronWeb.address.toHex(tronAddress);
-  console.log(`Tron Hex Address: ${fromTronHexAddress}`);
+  
   const toHexAddress = '418840E6C55B9ADA326D211D818C34A994AECED808';
   const transactionBuidlerParsa = new tnw.TransactionBuilder(tronWeb);
-  // console.log('Transaction Builder: ', transactionBuidlerParsa);
-  const transaction = await transactionBuidlerParsa.sendTrx(toHexAddress, 100, fromTronHexAddress);
-  console.log('Transaction: ', transaction);
-  // tronWeb.trx.signMessageV2('message')
-  console.log('Transaction Hash: ', transaction.txID);
+  
+  const transaction = await transactionBuidlerParsa.sendTrx(toHexAddress, 10, fromTronHexAddress);
+
   // Sign the message
   const signResponse = await axios.post(
     `${PORTAL_MPC_CLIENT_URL}/v1/raw/sign/SECP256K1`,
@@ -61,11 +62,10 @@ async function SignTron() {
     return;
   }
   const signature = signResponse.data.data;
-  console.log(`Successfully signed Tron transaction ${signature}`);
+  console.log(`Successfully signed Tron transaction with Signature: ${signature}`);
   transaction.signature = [signature];
-  console.log('Signed Transaction: ', transaction);
-  const result = await tronWeb.trx.sendRawTransaction(transaction);
-  console.log('Transaction Result: ', result);
+  await tronWeb.trx.sendRawTransaction(transaction);
+  console.log(`Successfully Submitted Transaction Hash with hash ${transaction.txID}`);
 }
 
 module.exports = {
