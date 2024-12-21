@@ -15,6 +15,7 @@
     "cosignsol": "node -e 'require(\"./sol-sign.js\").CoSignTransaction().catch(console.error)'",
     "stellar": "node -e 'require(\"./stellar.js\").SignStellar().catch(console.error)'",
     "signtron": "node -e 'require(\"./tron.js\").SignTron().catch(console.error)'",
+    "tron-monitor": "node -e 'require(\"./tron-transaction-monitoring.js\").TronPoll().catch(console.error)'",
     "lint": "eslint . --fix",
     "format": "prettier --write ."
   },
