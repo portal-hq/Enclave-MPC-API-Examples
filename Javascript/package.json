@@ -46,7 +46,7 @@
     "protobufjs": "^7.4.0",
     "stellar-sdk": "^12.2.0",
     "tiny-secp256k1": "^2.2.3",
-    "tronweb": "^6.0.0",
+    "tronweb": "^6.0.2",
     "tweetnacl": "^1.0.3",
     "tweetnacl-util": "^0.15.1",
     "uuid": "^10.0.0",
@@ -64,6 +64,7 @@
   "resolutions": {
     "@openzeppelin/contracts": "^4.8.3",
     "axios": "^1.8.4",
+    "@babel/runtime": "^7.26.10",
     "ws": "^8.18.0"
   }
 }
