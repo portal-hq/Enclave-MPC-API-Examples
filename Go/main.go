@@ -8,6 +8,7 @@ import (
 	"portal-hq/Enclave-Signer-API-Examples/generate"
 	"portal-hq/Enclave-Signer-API-Examples/recover"
 	"portal-hq/Enclave-Signer-API-Examples/signup"
+	"portal-hq/Enclave-Signer-API-Examples/solSign"
 )
 
 func main() {
@@ -34,5 +35,15 @@ func main() {
 	err = ethSign.Sign()
 	if err != nil {
 		log.Fatalf("SignEth failed: %v", err)
+	}
+
+	err = solSign.Sign("")
+	if err != nil {
+		log.Fatalf("SignSol failed: %v", err)
+	}
+
+	err = solSign.SignMessage()
+	if err != nil {
+		log.Fatalf("SignSolMessage failed: %v", err)
 	}
 }

@@ -62,6 +62,7 @@ Replace `<step>` with one of the following:
 - backup
 - recover
 - signeth
+- signsol
 
 Below is a breakdown of each individual step.
 
@@ -105,6 +106,20 @@ To run the Ethereum signing example, use the following command:
 make signeth
 ```
 
+### Sign Solana Transaction
+
+To run the Solana signing example, use the following command:
+
+```
+make signsol
+```
+
+You can also specify a fee payer address:
+
+```
+make signsol ADDRESS=your_solana_address
+```
+
 ## Additional Information
 
 ### Format the Code
@@ -122,12 +137,14 @@ gofmt -s -w .
 - `cmd/generate/main.go`: Script for running the generate function.
 - `cmd/backup/main.go`: Script for running the backup function.
 - `cmd/recover/main.go`: Script for running the recover function.
-- `cmd/eth_sign/main.go`: Script for running the Ethereum signing function.
+- `cmd/ethSign/main.go`: Script for running the Ethereum signing function.
+- `cmd/solSign/main.go`: Script for running the Solana signing function.
 - `signup/signup.go`: Contains the implementation of the signup function.
 - `generate/generate.go`: Contains the implementation of the generate function.
 - `backup/backup.go`: Contains the implementation of the backup function.
 - `recover/recover.go`: Contains the implementation of the recover function.
-- `eth_sign/eth_sign.go`: Contains the implementation of the Ethereum signing function.
+- `ethSign/ethSign.go`: Contains the implementation of the Ethereum signing function.
+- `solSign/solSign.go`: Contains the implementation of the Solana signing function.
 - `clientApiKey.txt`: File to store the client API key obtained during signup.
 - `shares.txt`: File to store the generated MPC shares.
 - `backupShares.txt`: File to store the backup MPC shares.

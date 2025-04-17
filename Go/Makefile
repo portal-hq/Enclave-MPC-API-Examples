@@ -17,5 +17,8 @@ recover:
 signeth:
 	go run cmd/ethSign/main.go
 
+signsol:
+	go run cmd/solSign/main.go $(ADDRESS)
+
 main:
 	go run .

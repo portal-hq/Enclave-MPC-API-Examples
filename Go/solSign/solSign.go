@@ -1,0 +1,289 @@
+package solSign
+
+import (
+	"bytes"
+	"context"
+	"encoding/base64"
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"portal-hq/Enclave-Signer-API-Examples/config"
+
+	"github.com/blocto/solana-go-sdk/client"
+	"github.com/blocto/solana-go-sdk/common"
+	"github.com/blocto/solana-go-sdk/program/system"
+	"github.com/blocto/solana-go-sdk/types"
+)
+
+// Constants for Solana
+const (
+	solRpcUrl = "https://api.devnet.solana.com"
+)
+
+// SignRequest represents the request to sign a Solana transaction or message
+type SignRequest struct {
+	Share   string `json:"share"`
+	Method  string `json:"method"`
+	Params  string `json:"params"`
+	RpcUrl  string `json:"rpcUrl"`
+	ChainId string `json:"chainId"`
+}
+
+// SignResponse represents the response from the signing request
+type SignResponse struct {
+	Data string `json:"data"`
+}
+
+// ClientInfoResponse represents the response from the client info request
+type ClientInfoResponse struct {
+	Metadata struct {
+		Namespaces struct {
+			Solana struct {
+				Address string `json:"address"`
+			} `json:"solana"`
+		} `json:"namespaces"`
+	} `json:"metadata"`
+}
+
+// PostRequest sends a POST request to the specified URL with the given body and authorization
+func PostRequest(url string, clientApiKey []byte, body []byte) ([]byte, error) {
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(body))
+	if err != nil {
+		return nil, fmt.Errorf("failed to create request: %v", err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", clientApiKey))
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("failed to perform request: %v", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		body, _ := ioutil.ReadAll(resp.Body)
+		return nil, fmt.Errorf("request failed with status %d: %s", resp.StatusCode, body)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read response body: %v", err)
+	}
+
+	return responseBody, nil
+}
+
+// GetRequest sends a GET request to the specified URL with the given authorization
+func GetRequest(url string, clientApiKey []byte) ([]byte, error) {
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create request: %v", err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", clientApiKey))
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("failed to perform request: %v", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		body, _ := ioutil.ReadAll(resp.Body)
+		return nil, fmt.Errorf("request failed with status %d: %s", resp.StatusCode, body)
+	}
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read response body: %v", err)
+	}
+
+	return responseBody, nil
+}
+
+// Sign signs a Solana transaction
+// If feePayerAddress is provided, it will be used as the fee payer for the transaction
+func Sign(feePayerAddress string) error {
+	// Read clientApiKey from file
+	clientApiKey, err := ioutil.ReadFile("clientApiKey.txt")
+	if err != nil {
+		return fmt.Errorf("no clientApiKey found, make sure to run the signup script first: %v", err)
+	}
+
+	// Read shares from file
+	sharesData, err := ioutil.ReadFile("shares.txt")
+	if err != nil {
+		return fmt.Errorf("no shares found, make sure to run the generate script first: %v", err)
+	}
+
+	var shares map[string]interface{}
+	if err := json.Unmarshal(sharesData, &shares); err != nil {
+		return fmt.Errorf("failed to unmarshal shares: %v", err)
+	}
+
+	// Get client info to retrieve Solana address
+	clientInfoResponse, err := GetRequest(fmt.Sprintf("%s/api/v3/clients/me", config.PORTAL_API_URL), clientApiKey)
+	if err != nil {
+		return fmt.Errorf("failed to get client info: %v", err)
+	}
+
+	var clientInfo ClientInfoResponse
+	if err := json.Unmarshal(clientInfoResponse, &clientInfo); err != nil {
+		return fmt.Errorf("failed to unmarshal client info: %v", err)
+	}
+
+	solanaAddress := clientInfo.Metadata.Namespaces.Solana.Address
+	fmt.Printf("Solana address: %s\n", solanaAddress)
+
+	// -- Start of transaction creation --
+	c := client.NewClient(solRpcUrl)
+	ctx := context.Background()
+
+	// 1. Get a recent blockhash
+	resp, err := c.GetLatestBlockhash(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to get latest blockhash: %v", err)
+	}
+
+	// 2. Build transfer instruction (0.00001 SOL → lamports)
+	from := common.PublicKeyFromString(solanaAddress)
+	lamportsPerSol := 1000000000 // 1 SOL = 1,000,000,000 lamports
+	to := common.PublicKeyFromString("GPsPXxoQA51aTJJkNHtFDFYui5hN5UxcFPnheJEHa5Du")
+
+	transferIx := system.Transfer(system.TransferParam{
+		From:   from,
+		To:     to,
+		Amount: uint64(0.00001 * float64(lamportsPerSol)),
+	})
+
+	// 3. Compose Message
+	feePayer := from
+	if feePayerAddress != "" {
+		feePayer = common.PublicKeyFromString(feePayerAddress)
+	}
+	msg := types.NewMessage(types.NewMessageParam{
+		FeePayer:        feePayer,
+		RecentBlockhash: resp.Blockhash,
+		Instructions:    []types.Instruction{transferIx},
+	})
+
+	// 4. Build unsigned transaction
+	tx, err := types.NewTransaction(types.NewTransactionParam{
+		Message: msg,
+		Signers: nil,
+	})
+	if err != nil {
+		return fmt.Errorf("failed to create new transaction: %v", err)
+	}
+
+	// 5. Serialize & Base64
+	raw, err := tx.Serialize()
+	if err != nil {
+		return fmt.Errorf("failed to serialize transaction: %v", err)
+	}
+	fmt.Println("Base64 tx:", base64.StdEncoding.EncodeToString(raw))
+	// -- End of transaction creation --
+
+	// If feePayerAddress is provided, log it
+	if feePayerAddress != "" {
+		fmt.Printf("Using fee payer address: %s\n", feePayerAddress)
+	}
+
+	// Sign the transaction
+	signReq := SignRequest{
+		Share:   shares["ED25519"].(map[string]interface{})["share"].(string),
+		Method:  "sol_signTransaction",
+		Params:  base64.StdEncoding.EncodeToString(raw),
+		RpcUrl:  solRpcUrl,
+		ChainId: "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1", // Solana devnet chain ID
+	}
+	signReqBody, err := json.Marshal(signReq)
+	if err != nil {
+		return fmt.Errorf("failed to marshal sign request: %v", err)
+	}
+
+	signResponse, err := PostRequest(fmt.Sprintf("%s/v1/sign", config.PORTAL_MPC_CLIENT_URL), clientApiKey, signReqBody)
+	if err != nil {
+		return fmt.Errorf("failed to sign transaction: %v", err)
+	}
+
+	var signData SignResponse
+	if err := json.Unmarshal(signResponse, &signData); err != nil {
+		return fmt.Errorf("failed to unmarshal sign response: %v", err)
+	}
+
+	fmt.Printf("Successfully signed Solana transaction with signature %s!\n", signData.Data)
+
+	return nil
+}
+
+// SignMessage signs a Solana message
+func SignMessage() error {
+	// Read clientApiKey from file
+	clientApiKey, err := ioutil.ReadFile("clientApiKey.txt")
+	if err != nil {
+		return fmt.Errorf("no clientApiKey found, make sure to run the signup script first: %v", err)
+	}
+
+	// Read shares from file
+	sharesData, err := ioutil.ReadFile("shares.txt")
+	if err != nil {
+		return fmt.Errorf("no shares found, make sure to run the generate script first: %v", err)
+	}
+
+	var shares map[string]interface{}
+	if err := json.Unmarshal(sharesData, &shares); err != nil {
+		return fmt.Errorf("failed to unmarshal shares: %v", err)
+	}
+
+	// Get client info to retrieve Solana address
+	clientInfoResponse, err := GetRequest(fmt.Sprintf("%s/api/v3/clients/me", config.PORTAL_API_URL), clientApiKey)
+	if err != nil {
+		return fmt.Errorf("failed to get client info: %v", err)
+	}
+
+	var clientInfo ClientInfoResponse
+	if err := json.Unmarshal(clientInfoResponse, &clientInfo); err != nil {
+		return fmt.Errorf("failed to unmarshal client info: %v", err)
+	}
+
+	solanaAddress := clientInfo.Metadata.Namespaces.Solana.Address
+	fmt.Printf("Solana address: %s\n", solanaAddress)
+
+	// Example message to sign
+	message := "Hello, Solana!"
+	messageParams, err := json.Marshal([]string{message})
+	if err != nil {
+		return fmt.Errorf("failed to marshal message params: %v", err)
+	}
+
+	// Sign the message
+	signReq := SignRequest{
+		Share:   shares["ED25519"].(map[string]interface{})["share"].(string),
+		Method:  "sol_signMessage",
+		Params:  string(messageParams),
+		RpcUrl:  solRpcUrl,
+		ChainId: "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1", // Solana devnet chain ID
+	}
+	signReqBody, err := json.Marshal(signReq)
+	if err != nil {
+		return fmt.Errorf("failed to marshal sign request: %v", err)
+	}
+
+	signResponse, err := PostRequest(fmt.Sprintf("%s/v1/sign", config.PORTAL_MPC_CLIENT_URL), clientApiKey, signReqBody)
+	if err != nil {
+		return fmt.Errorf("failed to sign message: %v", err)
+	}
+
+	var signData SignResponse
+	if err := json.Unmarshal(signResponse, &signData); err != nil {
+		return fmt.Errorf("failed to unmarshal sign response: %v", err)
+	}
+
+	fmt.Printf("Successfully signed Solana message with signature %s!\n", signData.Data)
+
+	return nil
+}
