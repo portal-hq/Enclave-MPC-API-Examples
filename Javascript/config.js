@@ -1,18 +1,21 @@
 require('dotenv').config();
 
-const PORTAL_API_URL = 'https://api.portalhq.io';
-const PORTAL_MPC_CLIENT_URL = 'https://mpc-client.portalhq.io:443';
-const PORTAL_EX = 'https://portalex-mpc.portalhq.io';
+// Environment configuration
+const ENV = process.env.NODE_ENV || 'DEV';
 
-const ethRpc =
-   'https://eth-sepolia.g.alchemy.com/v2/';
+// Get configuration values from environment variables
+const PORTAL_API_URL = process.env[`${ENV}_PORTAL_API_URL`];
+const PORTAL_MPC_CLIENT_URL = process.env[`${ENV}_PORTAL_MPC_CLIENT_URL`];
+const PORTAL_EX = process.env[`${ENV}_PORTAL_EX`];
 
-const BLOCKCYPHER_API_URL = 'https://api.blockcypher.com/v1/btc/test3'
-const BLOCKCYPHER_TOKEN = process.env.BLOCKCYPHER_TOKEN || ""
-const BITCOIN_FEE_RATE = 10 // satoshis per byte
-const BITCOIN_DUST_LIMIT = 546 // minimum output value in satoshis
-const TATUM_API_KEY = '';
-const TATUM_API_URL = 'https://api.tatum.io/v3';
+// Common configuration from environment variables
+const ethRpc = process.env.ETH_RPC_URL;
+const BLOCKCYPHER_API_URL = process.env.BLOCKCYPHER_API_URL;
+const BLOCKCYPHER_TOKEN = process.env.BLOCKCYPHER_TOKEN || "";
+const BITCOIN_FEE_RATE = parseInt(process.env.BITCOIN_FEE_RATE || "10", 10); // satoshis per byte
+const BITCOIN_DUST_LIMIT = parseInt(process.env.BITCOIN_DUST_LIMIT || "546", 10); // minimum output value in satoshis
+const TATUM_API_KEY = process.env.TATUM_API_KEY;
+const TATUM_API_URL = process.env.TATUM_API_URL;
 
 module.exports = {
   PORTAL_API_URL,

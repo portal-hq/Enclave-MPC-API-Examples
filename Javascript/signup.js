@@ -3,13 +3,15 @@ const axios = require('axios');
 const fs = require('fs');
 const { PORTAL_EX } = require('./config');
 
-async function Signup() {
+async function Signup(args = []) {
+  // Check if isAA is provided in the arguments
+  const isAccountAbstracted = args.includes('isAA');
   const now = new Date();
   const myUUID = uuidv4();
   const username = 'js-example-' + now.toISOString() + myUUID;
   const portalExResponse = await axios.post(
     `${PORTAL_EX}/mobile/signup`,
-    { username: username, isAccountAbstracted: false },
+    { username: username, isAccountAbstracted },
     {
       headers: { 'Content-Type': 'application/json' },
     },

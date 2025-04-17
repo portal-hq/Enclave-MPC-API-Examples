@@ -3,6 +3,7 @@ const Generate = require('./generate.js');
 const Backup = require('./backup.js');
 const Recover = require('./recover.js');
 const SignEth = require('./eth-sign.js');
+const SignEthTypedData = require('./eth-sign-typed-data.js');
 const solana = require('./sol-sign.js');
 
 async function main() {
@@ -20,6 +21,9 @@ async function main() {
 
   // Sign an ethereum transaction
   await SignEth();
+
+  // Sign an ethereum typed data
+  await SignEthTypedData();
 
   // Sign a Solana transaction
   await solana.SignSol('');

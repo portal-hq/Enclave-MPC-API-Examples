@@ -42,11 +42,32 @@ yarn install
 
 ### Environment Variables
 
-Create a `.env` file in the root of your project to store your environment variables:
+A `.env.example` file is provided in the repository. Copy this file to create your own `.env` file:
+
+```bash
+cp .env.example .env
+```
+
+Then, edit the `.env` file to fill in your specific values:
 
 ```
+# Environment
+NODE_ENV=DEV
+
+# Portal API URLs for your selected environment
+PROD_PORTAL_API_URL=https://api.portalhq.io
+PROD_PORTAL_MPC_CLIENT_URL=https://mpc-client.portalhq.io:443
+PROD_PORTAL_EX=https://portalex-mpc.portalhq.io
+
+# Ethereum RPC URL
 ETH_RPC_URL=https://your-custom-eth-rpc-url
+
+# Other configuration values
+BLOCKCYPHER_TOKEN=your-blockcypher-token
+TATUM_API_KEY=your-tatum-api-key
 ```
+
+Make sure to fill in all the required values in the `.env` file before running the examples.
 
 ## Running the Examples
 

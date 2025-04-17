@@ -16,6 +16,10 @@ Each directory includes code samples and documentation to help you get started q
 
 To get started with any of the examples, navigate to the respective directory and follow the instructions provided in the README file within that directory.
 
+### Environment Configuration
+
+Each language example may require environment variables to be set up. For example, the JavaScript implementation uses a `.env` file for configuration. Check the README in each directory for specific instructions on setting up environment variables.
+
 ## Documentation
 
 For detailed documentation on our MPC Signer API, please visit our [official documentation page](https://docs.portalhq.io/guides/enclave-mpc-api).
