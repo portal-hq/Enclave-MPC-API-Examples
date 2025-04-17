@@ -37,7 +37,7 @@ func main() {
 		log.Fatalf("SignEth failed: %v", err)
 	}
 
-	err = solSign.Sign("")
+	_, err = solSign.Sign("")
 	if err != nil {
 		log.Fatalf("SignSol failed: %v", err)
 	}

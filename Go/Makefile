@@ -1,4 +1,4 @@
-.PHONY: all signup generate backup recover signeth signsol
+.PHONY: all signup generate backup recover signeth signsol solcosigner solcosign solmessage
 
 all: main
 
@@ -19,6 +19,19 @@ signeth:
 
 signsol:
 	go run cmd/solSign/main.go $(ADDRESS)
+
+solcosigner:
+	go run cmd/solSign/main.go cosigner
+
+solcosign:
+	@if [ -z "$(ADDRESS)" ]; then \
+		echo "Error: ADDRESS is required. Use 'make solcosign ADDRESS=your_address'"; \
+		exit 1; \
+	fi
+	go run cmd/solSign/main.go cosign $(ADDRESS)
+
+solmessage:
+	go run cmd/solSign/main.go message
 
 main:
 	go run .
