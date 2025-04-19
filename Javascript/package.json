@@ -9,6 +9,8 @@
     "generate": "node -e 'require(\"./generate.js\")().catch(console.error)'",
     "backup": "node -e 'require(\"./backup.js\")().catch(console.error)'",
     "recover": "node -e 'require(\"./recover.js\")().catch(console.error)'",
+    "createSolCoSigner": "node -e 'require(\"./sol-cosigner.js\")().catch(console.error)'",
+    "cosignSolWithCoSigner": "node -e 'require(\"./sol-sign-cosigner.js\").CoSignTransactionWithCoSigner().catch(console.error)'",
     "signeth": "node -e 'require(\"./eth-sign.js\")().catch(console.error)'",
     "signethTypedData": "node -e 'require(\"./eth-sign-typed-data.js\")().catch(console.error)'",
     "signethAssets": "node -e 'require(\"./eth-send-assets.js\")().catch(console.error)'",
