@@ -34,7 +34,7 @@
     "@noble/secp256k1": "^1.7.1",
     "@portal-hq/eject-js": "^1.0.0",
     "@protocolink/api": "^1.4.8",
-    "@solana/web3.js": "^1.98.0",
+    "@solana/web3.js": "^1.98.2",
     "@stellar/stellar-sdk": "^12.2.0",
     "@tatumio/tatum": "^4.2.49",
     "@zerodev/ecdsa-validator": "5.0.0",
