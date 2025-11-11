@@ -77,7 +77,7 @@ async function portalSign(hexData, clientApiKey, shares) {
       `${PORTAL_MPC_CLIENT_URL}/v1/raw/sign/SECP256K1`,
       {
         share: shares.SECP256K1.share,
-        param: hexData,
+        params: hexData,
       },
       {
         headers: {

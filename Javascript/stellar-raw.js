@@ -77,7 +77,7 @@ async function SignStellar() {
       `${PORTAL_MPC_CLIENT_URL}/v1/raw/sign/ED25519`,
       {
         share: shares.ED25519.share,
-        param: transactionHashHex,
+        params: transactionHashHex,
       },
       {
         headers: { Authorization: `Bearer ${clientApiKey}` },
