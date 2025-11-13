@@ -53,7 +53,7 @@ async function SignTron() {
     `${PORTAL_MPC_CLIENT_URL}/v1/raw/sign/SECP256K1`,
     {
       share: shares.SECP256K1.share,
-      param: transaction.txID,
+      params: transaction.txID,
     },
     {
       headers: { Authorization: `Bearer ${clientApiKey}` },
