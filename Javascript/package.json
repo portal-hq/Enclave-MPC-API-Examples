@@ -25,6 +25,7 @@
     "tron-send": "node -e 'require(\"./tron-send-assets.js\").SignTron().catch(console.error)'",
     "tron-monitor": "node -e 'require(\"./tron-transaction-monitoring.js\").TronPoll().catch(console.error)'",
     "btc": "node -e 'require(\"./btc.js\").createTransaction(\"tb1qmg6kwp2zxqx522jfhs0ustgl88efxg0mhg3mrw\").catch(console.error)'",
+    "yieldxyz": "node -e 'require(\"./yieldxyz.js\")().catch(console.error)'",
     "lint": "eslint . --fix",
     "format": "prettier --write ."
   },

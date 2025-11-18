@@ -141,6 +141,16 @@ To run the co-signing example where you have a separate fee payer for the Solana
 yarn coSignsol
 ```
 
+### Yield.xyz Integration
+
+To run the Yield.xyz integration example, which demonstrates how to discover yields, enter a yield position, and check balances, use the following command:
+
+```bash
+yarn yieldxyz
+```
+
+**Note:** This example uses Alchemy RPC for transaction receipt polling. Make sure your `ETH_RPC_URL` in the `.env` file is set to a valid Alchemy endpoint (e.g., `https://eth-sepolia.g.alchemy.com/v2/YOUR_ALCHEMY_API_KEY`). The example targets the Sepolia testnet and uses LINK token on Aave V3.
+
 ## Additional Scripts
 
 ### Lint the Code
@@ -168,5 +178,6 @@ yarn format
 - `recover.js`: Script for recovering MPC shares.
 - `eth-sign.js`: Script for signing Ethereum transactions.
 - `sol-sign.js`: Script for signing Solana transactions.
+- `yieldxyz.js`: Script demonstrating Yield.xyz integration for discovering yields, entering positions, and checking balances.
 - `clientApiKey.txt`: File to store the client API key obtained during signup.
 - `shares.txt`: File to store the generated MPC shares.
