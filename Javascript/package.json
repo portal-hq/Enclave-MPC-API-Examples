@@ -12,6 +12,7 @@
     "format": "prettier --write .",
     "generate": "node -e 'require(\"./generate.js\")().catch(console.error)'",
     "lifi:get-quote": "node -e 'require(\"./lifi-get-quote.js\")().catch(console.error)'",
+    "lifi:get-route": "node -e 'require(\"./lifi-get-route.js\")().catch(console.error)'",
     "lint": "eslint . --fix",
     "recover": "node -e 'require(\"./recover.js\")().catch(console.error)'",
     "signeth": "node -e 'require(\"./eth-sign.js\")().catch(console.error)'",
