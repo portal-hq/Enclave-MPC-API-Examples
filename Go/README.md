@@ -38,7 +38,7 @@ go mod tidy
 Create a `.env` file in the root of your project to store your environment variables:
 
 ```
-ETH_RPC_URL=https://your-custom-eth-rpc-url
+ETH_SEPOLIA_RPC_URL=https://your-custom-eth-rpc-url
 ```
 
 ## Running the Examples

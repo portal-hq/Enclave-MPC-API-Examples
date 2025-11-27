@@ -1,6 +1,10 @@
 const axios = require('axios');
 const fs = require('fs');
-const { PORTAL_MPC_CLIENT_URL, PORTAL_API_URL, ethRpc } = require('./config');
+const {
+  PORTAL_MPC_CLIENT_URL,
+  PORTAL_API_URL,
+  SEPOLIA_RPC_URL,
+} = require('./config');
 const { Web3 } = require('web3');
 
 async function getNextNonce(address, rpcUrl) {
@@ -31,17 +35,19 @@ async function SignMultipleEth() {
       Authorization: `Bearer ${clientApiKey}`,
     },
   });
-  
+
   if (meResponse.status !== 200) {
     console.error('Failed to get client info:', meResponse.data);
     return;
   }
 
   const ethAddress = meResponse.data.metadata.namespaces.eip155.address;
-  console.log(`My eth address ${ethAddress} and client id ${meResponse.data.id}`);
+  console.log(
+    `My eth address ${ethAddress} and client id ${meResponse.data.id}`,
+  );
 
   // Get the current nonce
-  const currentNonce = await getNextNonce(ethAddress, ethRpc);
+  const currentNonce = await getNextNonce(ethAddress, SEPOLIA_RPC_URL);
   console.log(`Starting with nonce: ${currentNonce}`);
 
   // Send 5 transactions with incrementing nonces
@@ -51,7 +57,7 @@ async function SignMultipleEth() {
   for (let i = 0; i < numTransactions; i++) {
     const nonce = Number(currentNonce) + i;
     const hexNonce = '0x' + nonce.toString(16);
-    
+
     const transactionParams = {
       nonce: hexNonce,
       value: '0x1',
@@ -72,7 +78,7 @@ async function SignMultipleEth() {
           share: shares.SECP256K1.share,
           method: 'eth_sendTransaction',
           params: JSON.stringify(transactionParams),
-          rpcUrl: ethRpc,
+          rpcUrl: SEPOLIA_RPC_URL,
           chainId: 'eip155:11155111', // Sepolia chain ID
         },
         {
@@ -89,18 +95,24 @@ async function SignMultipleEth() {
           `Successfully signed transaction with nonce ${hexNonce}, hash: ${signResponse.data.data}`,
         );
       } else {
-        console.error(`Failed to sign transaction with nonce ${hexNonce}:`, signResponse.data);
+        console.error(
+          `Failed to sign transaction with nonce ${hexNonce}:`,
+          signResponse.data,
+        );
       }
     } catch (error) {
-      console.error(`Error signing transaction with nonce ${hexNonce}:`, error.message);
+      console.error(
+        `Error signing transaction with nonce ${hexNonce}:`,
+        error.message,
+      );
     }
 
     // Add a small delay between transactions to prevent rate limiting
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
   }
 
   console.log('\nTransaction Summary:');
-  transactions.forEach(tx => {
+  transactions.forEach((tx) => {
     console.log(`Nonce: ${tx.nonce}, Hash: ${tx.hash}`);
   });
 }

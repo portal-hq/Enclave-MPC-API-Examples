@@ -1,6 +1,10 @@
 const axios = require('axios');
 const fs = require('fs');
-const { PORTAL_MPC_CLIENT_URL, ethRpc, PORTAL_API_URL } = require('./config');
+const {
+  PORTAL_MPC_CLIENT_URL,
+  SEPOLIA_RPC_URL,
+  PORTAL_API_URL,
+} = require('./config');
 
 async function SignEthAssets() {
   // Read clientApiKey from file
@@ -17,7 +21,7 @@ async function SignEthAssets() {
     return;
   }
 
-    const meResponse = await axios.get(`${PORTAL_API_URL}/api/v3/clients/me`, {
+  const meResponse = await axios.get(`${PORTAL_API_URL}/api/v3/clients/me`, {
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${clientApiKey}`,
@@ -34,12 +38,12 @@ async function SignEthAssets() {
   const signResponse = await axios.post(
     `${PORTAL_MPC_CLIENT_URL}/v1/assets/send`,
     {
-        share: shares.SECP256K1.share,
-        chain: 'eip155:11155111', // Or tron:mainnet or tron:shasta
-        to: '0xdFd8302f44727A6348F702fF7B594f127dE3A902',
-        token: 'NATIVE', // Or NATIVE USDT
-        amount: "1",
-        rpcUrl: ethRpc, // grpc url
+      share: shares.SECP256K1.share,
+      chain: 'eip155:11155111', // Or tron:mainnet or tron:shasta
+      to: '0xdFd8302f44727A6348F702fF7B594f127dE3A902',
+      token: 'NATIVE', // Or NATIVE USDT
+      amount: '1',
+      rpcUrl: SEPOLIA_RPC_URL, // grpc url
     },
     {
       headers: { Authorization: `Bearer ${clientApiKey}` },
@@ -50,7 +54,8 @@ async function SignEthAssets() {
     return;
   }
   console.log(
-    `Successfully Eth signed transaction with signature:`, signResponse.data,
+    `Successfully Eth signed transaction with signature:`,
+    signResponse.data,
   );
 }
 

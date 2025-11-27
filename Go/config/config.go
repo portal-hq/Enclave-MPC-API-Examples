@@ -11,8 +11,8 @@ const (
 	PORTAL_EX             = "https://portalex-mpc.portalhq.io"
 )
 
-// ethRpc reads the ETH_RPC_URL environment variable, or uses a default value if not set
-var ethRpc = getEnv("ETH_RPC_URL", "https://sepolia.infura.io/v3/<API_KEY>")
+// ethSepoliaRpc reads the ETH_SEPOLIA_RPC_URL environment variable, or uses a default value if not set
+var ethSepoliaRpc = getEnv("ETH_SEPOLIA_RPC_URL", "https://sepolia.infura.io/v3/<API_KEY>")
 
 // getEnv is a helper function to read an environment variable or return a default value
 func getEnv(key, defaultValue string) string {

@@ -1,6 +1,6 @@
 const axios = require('axios');
 const fs = require('fs');
-const { PORTAL_MPC_CLIENT_URL, ethRpc } = require('./config');
+const { PORTAL_MPC_CLIENT_URL, SEPOLIA_RPC_URL } = require('./config');
 
 async function SignEth() {
   // Read clientApiKey from file
@@ -35,7 +35,7 @@ async function SignEth() {
       share: shares.SECP256K1.share,
       method: 'eth_signTransaction',
       params: JSON.stringify(transactionParams),
-      rpcUrl: ethRpc,
+      rpcUrl: SEPOLIA_RPC_URL,
       chainId: 'eip155:11155111', // Sepolia chain ID
     },
     {
