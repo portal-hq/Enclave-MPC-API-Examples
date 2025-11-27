@@ -9,7 +9,7 @@ import (
 
 const (
 	ethPortalMpcClientUrl = "https://mpc-client.portalhq.io:443"
-	ethRpcUrl             = "https://sepolia.infura.io/v3/<API_KEY>" // Replace with your ETH RPC URL
+	ethSepoliaRpcUrl      = "https://sepolia.infura.io/v3/<API_KEY>" // Replace with your ETH RPC URL
 )
 
 type TransactionParams struct {
@@ -73,7 +73,7 @@ func Sign() error {
 		Share:   shares["SECP256K1"].(map[string]interface{})["share"].(string),
 		Method:  "eth_signTransaction",
 		Params:  string(paramsJson),
-		RpcUrl:  ethRpcUrl,
+		RpcUrl:  ethSepoliaRpcUrl,
 		ChainId: "eip155:11155111", // Sepolia chain ID
 	}
 	signReqBody, err := json.Marshal(signReq)

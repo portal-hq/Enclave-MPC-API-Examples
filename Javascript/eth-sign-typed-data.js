@@ -1,6 +1,6 @@
 const axios = require('axios');
 const fs = require('fs');
-const { PORTAL_MPC_CLIENT_URL, ethRpc } = require('./config');
+const { PORTAL_MPC_CLIENT_URL, SEPOLIA_RPC_URL } = require('./config');
 
 async function SignEthTypedData() {
   // Read clientApiKey from file
@@ -20,7 +20,7 @@ async function SignEthTypedData() {
   // The typed data payload to sign
   // First element is the address, second element is the typed data JSON string
   const typedDataPayload = [
-    "0xaeabe5b13828f691fdb56007502ef9035c95e8b2",
+    '0xaeabe5b13828f691fdb56007502ef9035c95e8b2',
     `{
       "types": {
         "EIP712Domain": [
@@ -57,7 +57,7 @@ async function SignEthTypedData() {
         },
         "contents": "Hello, Bob!"
       }
-    }`
+    }`,
   ];
 
   // Sign the typed data
@@ -67,7 +67,7 @@ async function SignEthTypedData() {
       share: shares.SECP256K1.share,
       method: 'eth_signTypedData_v4',
       params: JSON.stringify(typedDataPayload),
-      rpcUrl: ethRpc,
+      rpcUrl: SEPOLIA_RPC_URL,
       chainId: 'eip155:1', // Using mainnet chain ID as per the typed data
     },
     {

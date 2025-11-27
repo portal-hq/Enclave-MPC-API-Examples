@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Import constants from config.py
-from config import PORTAL_MPC_CLIENT_URL, ethRpc
+from config import PORTAL_MPC_CLIENT_URL, SEPOLIA_RPC_URL
 
 
 async def sign_eth():
@@ -55,7 +55,7 @@ async def sign_eth():
                 "share": shares["SECP256K1"]["share"],
                 "method": "eth_signTransaction",
                 "params": json.dumps(transaction_params),
-                "rpcUrl": ethRpc,
+                "rpcUrl": SEPOLIA_RPC_URL,
                 "chainId": "eip155:11155111",  # Sepolia chain ID
             },
             headers={"Authorization": f"Bearer {client_api_key}"},

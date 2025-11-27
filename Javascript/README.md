@@ -60,7 +60,7 @@ PROD_PORTAL_MPC_CLIENT_URL=https://mpc-client.portalhq.io:443
 PROD_PORTAL_EX=https://portalex-mpc.portalhq.io
 
 # Ethereum RPC URL
-ETH_RPC_URL=https://your-custom-eth-rpc-url
+ETH_SEPOLIA_RPC_URL=https://your-custom-eth-rpc-url
 
 # Other configuration values
 BLOCKCYPHER_TOKEN=your-blockcypher-token
@@ -149,7 +149,7 @@ To run the Yield.xyz integration example, which demonstrates how to discover yie
 yarn yieldxyz
 ```
 
-**Note:** This example uses Alchemy RPC for transaction receipt polling. Make sure your `ETH_RPC_URL` in the `.env` file is set to a valid Alchemy endpoint (e.g., `https://eth-sepolia.g.alchemy.com/v2/YOUR_ALCHEMY_API_KEY`). The example targets the Sepolia testnet and uses LINK token on Aave V3.
+**Note:** This example uses Alchemy RPC for transaction receipt polling. Make sure your `ETH_SEPOLIA_RPC_URL` in the `.env` file is set to a valid Alchemy endpoint (e.g., `https://eth-sepolia.g.alchemy.com/v2/YOUR_ALCHEMY_API_KEY`). The example targets the Sepolia testnet and uses LINK token on Aave V3.
 
 ## Additional Scripts
 

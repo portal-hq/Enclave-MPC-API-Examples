@@ -6,6 +6,7 @@
     "CAIP",
     "cosignsol",
     "ecpair",
+    "lifi",
     "permissionless",
     "protocolink",
     "satoshis",
@@ -14,6 +15,7 @@
     "tatumio",
     "tronweb",
     "viem",
+    "yieldxyz",
     "zerodev"
   ]
 }
