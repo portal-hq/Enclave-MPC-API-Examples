@@ -24,6 +24,11 @@ type BackupPatchRequest struct {
 }
 
 func Backup() error {
+	// Load environment variables
+	if err := config.LoadEnv(); err != nil {
+		return fmt.Errorf("failed to load environment variables: %v", err)
+	}
+
 	// Read clientApiKey from file
 	clientApiKey, err := ioutil.ReadFile("clientApiKey.txt")
 	if err != nil {
@@ -50,7 +55,8 @@ func Backup() error {
 		return fmt.Errorf("failed to marshal backup request: %v", err)
 	}
 
-	backupResponse, err := pkg.PostRequest(config.PORTAL_MPC_CLIENT_URL+"/v1/backup", clientApiKey, backupReqBody)
+	portalMPCClientURL := config.GetPortalMPCClientURL()
+	backupResponse, err := pkg.PostRequest(portalMPCClientURL+"/v1/backup", clientApiKey, backupReqBody)
 	if err != nil {
 		return fmt.Errorf("failed to backup MPC shares: %v", err)
 	}
@@ -72,7 +78,8 @@ func Backup() error {
 		return fmt.Errorf("failed to marshal patch request: %v", err)
 	}
 
-	if _, err := pkg.SendPatchRequest(config.PORTAL_API_URL+"/api/v3/clients/me/backup-share-pairs", clientApiKey, patchReqBody); err != nil {
+	portalAPIURL := config.GetPortalAPIURL()
+	if _, err := pkg.SendPatchRequest(portalAPIURL+"/api/v3/clients/me/backup-share-pairs", clientApiKey, patchReqBody); err != nil {
 		return fmt.Errorf("failed to update MPC shares status: %v", err)
 	}
 

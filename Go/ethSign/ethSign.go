@@ -4,12 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"portal-hq/Enclave-Signer-API-Examples/config"
 	"portal-hq/Enclave-Signer-API-Examples/pkg"
-)
-
-const (
-	ethPortalMpcClientUrl = "https://mpc-client.portalhq.io:443"
-	ethSepoliaRpcUrl      = "https://sepolia.infura.io/v3/<API_KEY>" // Replace with your ETH RPC URL
 )
 
 type TransactionParams struct {
@@ -36,6 +32,11 @@ type SignResponse struct {
 }
 
 func Sign() error {
+	// Load environment variables
+	if err := config.LoadEnv(); err != nil {
+		return fmt.Errorf("failed to load environment variables: %v", err)
+	}
+
 	// Read clientApiKey from file
 	clientApiKey, err := ioutil.ReadFile("clientApiKey.txt")
 	if err != nil {
@@ -73,7 +74,7 @@ func Sign() error {
 		Share:   shares["SECP256K1"].(map[string]interface{})["share"].(string),
 		Method:  "eth_signTransaction",
 		Params:  string(paramsJson),
-		RpcUrl:  ethSepoliaRpcUrl,
+		RpcUrl:  config.GetEthSepoliaRpcURL(),
 		ChainId: "eip155:11155111", // Sepolia chain ID
 	}
 	signReqBody, err := json.Marshal(signReq)
@@ -81,7 +82,8 @@ func Sign() error {
 		return fmt.Errorf("failed to marshal sign request: %v", err)
 	}
 
-	signResponse, err := pkg.PostRequest(ethPortalMpcClientUrl+"/v1/sign", clientApiKey, signReqBody)
+	portalMPCClientURL := config.GetPortalMPCClientURL()
+	signResponse, err := pkg.PostRequest(portalMPCClientURL+"/v1/sign", clientApiKey, signReqBody)
 	if err != nil {
 		return fmt.Errorf("failed to sign transaction: %v", err)
 	}

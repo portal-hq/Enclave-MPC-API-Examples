@@ -35,11 +35,38 @@ go mod tidy
 
 ### Environment Variables
 
-Create a `.env` file in the root of your project to store your environment variables:
+A `.env.example` file is provided in the repository. Copy this file to create your own `.env` file:
 
 ```
-ETH_SEPOLIA_RPC_URL=https://your-custom-eth-rpc-url
+cp .env.example .env
 ```
+
+Then, edit the `.env` file to fill in your specific values:
+
+```
+# Environment (DEV, STAGING, or PROD)
+ENV=DEV
+
+# Portal API URLs for DEV environment
+DEV_PORTAL_API_URL=https://api.dev.portalhq.io
+DEV_PORTAL_MPC_CLIENT_URL=https://mpc-client.dev.portalhq.io:443
+DEV_PORTAL_EX=https://portalex-mpc.dev.portalhq.io
+
+# Portal API URLs for STAGING environment
+STAGING_PORTAL_API_URL=https://api.staging.portalhq.io
+STAGING_PORTAL_MPC_CLIENT_URL=https://mpc-client.staging.portalhq.io:443
+STAGING_PORTAL_EX=https://portalex-mpc.staging.portalhq.io
+
+# Portal API URLs for PROD environment
+PROD_PORTAL_API_URL=https://api.portalhq.io
+PROD_PORTAL_MPC_CLIENT_URL=https://mpc-client.portalhq.io:443
+PROD_PORTAL_EX=https://portalex-mpc.portalhq.io
+
+# Ethereum RPC URL
+ETH_SEPOLIA_RPC_URL=https://eth-sepolia.g.alchemy.com/v2/YOUR_ALCHEMY_API_KEY
+```
+
+Make sure to set the `ENV` variable to the environment you want to use (DEV, STAGING, or PROD), and fill in the Ethereum RPC URL with your Alchemy or Infura endpoint.
 
 ## Running the Examples
 
@@ -62,6 +89,8 @@ Replace `<step>` with one of the following:
 - backup
 - recover
 - signeth
+- signethAssets
+- signethTypedData
 - signsol
 
 Below is a breakdown of each individual step.
@@ -106,6 +135,26 @@ To run the Ethereum signing example, use the following command:
 make signeth
 ```
 
+### Send Ethereum Assets
+
+To run the Ethereum asset sending example (using the `/v1/assets/send` endpoint), use the following command:
+
+```
+make signethAssets
+```
+
+This example demonstrates how to send native ETH or tokens using Portal's simplified assets API.
+
+### Sign Ethereum Typed Data
+
+To run the Ethereum typed data signing example (EIP-712), use the following command:
+
+```
+make signethTypedData
+```
+
+This example demonstrates how to sign structured typed data for EIP-712 compatible applications.
+
 ### Sign Solana Transaction
 
 To run the Solana signing example, use the following command:
@@ -132,20 +181,26 @@ gofmt -s -w .
 
 ## File Structure
 
-- `cmd/main.go`: The main script that sequentially calls all functions (signup, generate, backup, recover, signeth).
+- `main.go`: The main script that sequentially calls all functions (signup, generate, backup, recover, signeth).
 - `cmd/signup/main.go`: Script for running the signup function.
 - `cmd/generate/main.go`: Script for running the generate function.
 - `cmd/backup/main.go`: Script for running the backup function.
 - `cmd/recover/main.go`: Script for running the recover function.
 - `cmd/ethSign/main.go`: Script for running the Ethereum signing function.
+- `cmd/ethSendAssets/main.go`: Script for running the Ethereum asset sending function.
+- `cmd/ethSignTypedData/main.go`: Script for running the Ethereum typed data signing function.
 - `cmd/solSign/main.go`: Script for running the Solana signing function.
 - `signup/signup.go`: Contains the implementation of the signup function.
 - `generate/generate.go`: Contains the implementation of the generate function.
 - `backup/backup.go`: Contains the implementation of the backup function.
 - `recover/recover.go`: Contains the implementation of the recover function.
 - `ethSign/ethSign.go`: Contains the implementation of the Ethereum signing function.
+- `ethSendAssets/ethSendAssets.go`: Contains the implementation of the Ethereum asset sending function.
+- `ethSignTypedData/ethSignTypedData.go`: Contains the implementation of the Ethereum typed data signing function.
 - `solSign/solSign.go`: Contains the implementation of the Solana signing function.
+- `config/config.go`: Contains configuration management and environment variable handling.
+- `pkg/httpHelpers.go`: Contains HTTP helper functions for API requests.
 - `clientApiKey.txt`: File to store the client API key obtained during signup.
 - `shares.txt`: File to store the generated MPC shares.
 - `backupShares.txt`: File to store the backup MPC shares.
-"""
+- `.env`: Environment configuration file (create from `.env.example`).

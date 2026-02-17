@@ -1,4 +1,4 @@
-.PHONY: all signup generate backup recover signeth signsol solcosigner solcosign solmessage
+.PHONY: all signup generate backup recover signeth signethAssets signethTypedData signsol solcosigner solcosign solmessage
 
 all: main
 
@@ -16,6 +16,12 @@ recover:
 
 signeth:
 	go run cmd/ethSign/main.go
+
+signethAssets:
+	go run cmd/ethSendAssets/main.go
+
+signethTypedData:
+	go run cmd/ethSignTypedData/main.go
 
 signsol:
 	go run cmd/solSign/main.go $(ADDRESS)

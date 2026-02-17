@@ -22,6 +22,11 @@ type SignupResponse struct {
 }
 
 func Signup() error {
+	// Load environment variables
+	if err := config.LoadEnv(); err != nil {
+		return fmt.Errorf("failed to load environment variables: %v", err)
+	}
+
 	now := time.Now().Format(time.RFC3339)
 	myUUID := uuid.New().String()
 	username := "go-example-" + now + myUUID
@@ -34,7 +39,8 @@ func Signup() error {
 		return fmt.Errorf("failed to marshal request body: %v", err)
 	}
 
-	req, err := http.NewRequest("POST", config.PORTAL_EX+"/mobile/signup", bytes.NewBuffer(requestBody))
+	portalEx := config.GetPortalEx()
+	req, err := http.NewRequest("POST", portalEx+"/mobile/signup", bytes.NewBuffer(requestBody))
 	if err != nil {
 		return fmt.Errorf("failed to create request: %v", err)
 	}

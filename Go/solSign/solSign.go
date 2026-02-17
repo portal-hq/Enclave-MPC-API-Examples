@@ -232,6 +232,11 @@ func CoSign(cosignerAddress string) error {
 // If feePayerAddress is provided, it will be used as the fee payer for the transaction
 // Returns the transaction signature if successful
 func Sign(feePayerAddress string) (string, error) {
+	// Load environment variables
+	if err := config.LoadEnv(); err != nil {
+		return "", fmt.Errorf("failed to load environment variables: %v", err)
+	}
+
 	// Read clientApiKey from file
 	clientApiKey, err := ioutil.ReadFile("clientApiKey.txt")
 	if err != nil {
@@ -250,7 +255,7 @@ func Sign(feePayerAddress string) (string, error) {
 	}
 
 	// Get client info to retrieve Solana address
-	clientInfoResponse, err := GetRequest(fmt.Sprintf("%s/api/v3/clients/me", config.PORTAL_API_URL), clientApiKey)
+	clientInfoResponse, err := GetRequest(fmt.Sprintf("%s/api/v3/clients/me", config.GetPortalAPIURL()), clientApiKey)
 	if err != nil {
 		return "", fmt.Errorf("failed to get client info: %v", err)
 	}
@@ -330,7 +335,7 @@ func Sign(feePayerAddress string) (string, error) {
 		return "", fmt.Errorf("failed to marshal sign request: %v", err)
 	}
 
-	signResponse, err := PostRequest(fmt.Sprintf("%s/v1/sign", config.PORTAL_MPC_CLIENT_URL), clientApiKey, signReqBody)
+	signResponse, err := PostRequest(fmt.Sprintf("%s/v1/sign", config.GetPortalMPCClientURL()), clientApiKey, signReqBody)
 	if err != nil {
 		return "", fmt.Errorf("failed to sign transaction: %v", err)
 	}
@@ -365,7 +370,7 @@ func SignMessage() error {
 	}
 
 	// Get client info to retrieve Solana address
-	clientInfoResponse, err := GetRequest(fmt.Sprintf("%s/api/v3/clients/me", config.PORTAL_API_URL), clientApiKey)
+	clientInfoResponse, err := GetRequest(fmt.Sprintf("%s/api/v3/clients/me", config.GetPortalAPIURL()), clientApiKey)
 	if err != nil {
 		return fmt.Errorf("failed to get client info: %v", err)
 	}
@@ -398,7 +403,7 @@ func SignMessage() error {
 		return fmt.Errorf("failed to marshal sign request: %v", err)
 	}
 
-	signResponse, err := PostRequest(fmt.Sprintf("%s/v1/sign", config.PORTAL_MPC_CLIENT_URL), clientApiKey, signReqBody)
+	signResponse, err := PostRequest(fmt.Sprintf("%s/v1/sign", config.GetPortalMPCClientURL()), clientApiKey, signReqBody)
 	if err != nil {
 		return fmt.Errorf("failed to sign message: %v", err)
 	}

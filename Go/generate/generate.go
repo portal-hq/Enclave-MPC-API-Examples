@@ -41,6 +41,11 @@ type Namespace struct {
 }
 
 func Generate() error {
+	// Load environment variables
+	if err := config.LoadEnv(); err != nil {
+		return fmt.Errorf("failed to load environment variables: %v", err)
+	}
+
 	// Read clientApiKey from file
 	clientApiKey, err := ioutil.ReadFile("clientApiKey.txt")
 	if err != nil {
@@ -48,7 +53,8 @@ func Generate() error {
 	}
 
 	// Generate MPC shares
-	generateResponse, err := pkg.PostRequest(config.PORTAL_MPC_CLIENT_URL+"/v1/generate", clientApiKey, []byte("{}")) // Pass in empty body
+	portalMPCClientURL := config.GetPortalMPCClientURL()
+	generateResponse, err := pkg.PostRequest(portalMPCClientURL+"/v1/generate", clientApiKey, []byte("{}")) // Pass in empty body
 	if err != nil {
 		return fmt.Errorf("failed to generate MPC shares: %v", err)
 	}
@@ -70,7 +76,8 @@ func Generate() error {
 		return fmt.Errorf("failed to marshal patch request: %v", err)
 	}
 
-	if _, err := pkg.SendPatchRequest(config.PORTAL_API_URL+"/api/v3/clients/me/signing-share-pairs", clientApiKey, patchRequestBody); err != nil {
+	portalAPIURL := config.GetPortalAPIURL()
+	if _, err := pkg.SendPatchRequest(portalAPIURL+"/api/v3/clients/me/signing-share-pairs", clientApiKey, patchRequestBody); err != nil {
 		return fmt.Errorf("failed to update MPC shares status: %v", err)
 	}
 
@@ -80,7 +87,7 @@ func Generate() error {
 	}
 
 	// Get wallet addresses
-	meResponse, err := pkg.GetRequest(config.PORTAL_API_URL+"/api/v3/clients/me", clientApiKey)
+	meResponse, err := pkg.GetRequest(portalAPIURL+"/api/v3/clients/me", clientApiKey)
 	if err != nil {
 		return fmt.Errorf("failed to get client info: %v", err)
 	}
