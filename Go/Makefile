@@ -1,4 +1,4 @@
-.PHONY: all signup generate backup recover signeth signsol solcosigner solcosign solmessage
+.PHONY: all signup generate backup recover signeth signsol solcosigner solcosign solmessage sendUsdc sendUsdcSponsored
 
 all: main
 
@@ -32,6 +32,12 @@ solcosign:
 
 solmessage:
 	go run cmd/solSign/main.go message
+
+sendUsdc:
+	go run cmd/sendUsdc/main.go
+
+sendUsdcSponsored:
+	go run cmd/sendUsdc/main.go sponsored
 
 main:
 	go run .

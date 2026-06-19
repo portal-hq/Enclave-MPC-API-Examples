@@ -107,6 +107,30 @@ To run the Ethereum signing example, use the following command:
 python eth_sign.py
 ```
 
+### Send USDC (ERC-20)
+
+This example sends USDC using Portal's enclave `assets/send` endpoint, which builds, signs, and broadcasts the ERC-20 transfer for you — no need to hand-build the transaction. The same endpoint works for any ERC-20 by changing the `TOKEN` constant (a shorthand like `USDC`/`USDT`, or a contract address) in `send_usdc.py`.
+
+Two flows are supported:
+
+- **Account Abstraction (gas sponsored).** Portal sponsors the gas, so the wallet does not need to hold any native token. This requires an AA client, so set `isAccountAbstracted` to `True` in `signup.py` before running signup, then:
+
+  ```
+  python signup.py
+  python generate.py
+  python send_usdc.py sponsored
+  ```
+
+- **Non-AA (wallet pays its own gas).** A standard wallet pays its own gas and **must hold the chain's native token** (e.g. Sepolia ETH). Without it, the request fails with an insufficient-balance error even when the wallet holds plenty of USDC.
+
+  ```
+  python signup.py
+  python generate.py
+  python send_usdc.py
+  ```
+
+> **Note:** Make sure the wallet holds testnet USDC before sending (and, for the non-AA flow, some native gas). You can get testnet USDC from the [Circle faucet](https://faucet.circle.com/). If the `USDC` shorthand isn't supported on your target chain, set `TOKEN` in `send_usdc.py` to the USDC contract address instead.
+
 ## Additional Scripts
 
 ### Lint the Code
@@ -133,6 +157,7 @@ black *.py
 - \`backup.py\`: Script for backing up MPC shares.
 - \`recover.py\`: Script for recovering MPC shares.
 - \`eth_sign.py\`: Script for signing Ethereum transactions.
+- \`send_usdc.py\`: Script for sending USDC via the enclave \`assets/send\` endpoint, covering both the AA (gas sponsored) and non-AA (wallet pays gas) flows.
 - \`clientApiKey.txt\`: File to store the client API key obtained during signup.
 - \`shares.txt\`: File to store the generated MPC shares.
 - \`backupShares.txt\`: File to store the backup MPC shares.

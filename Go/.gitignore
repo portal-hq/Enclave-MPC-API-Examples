@@ -23,3 +23,8 @@ go.work
 .env.development
 .env.test
 .env.production
+
+# Portal wallet credentials (never commit these)
+clientApiKey.txt
+shares.txt
+backupShares.txt
