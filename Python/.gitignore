@@ -62,6 +62,11 @@ env.bak/
 venv.bak/
 myenv/
 
+# Portal wallet credentials (never commit these)
+clientApiKey.txt
+shares.txt
+backupShares.txt
+
 # Spyder project settings
 .spyderproject
 .spyproject

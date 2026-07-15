@@ -141,6 +141,30 @@ To run the co-signing example where you have a separate fee payer for the Solana
 yarn coSignsol
 ```
 
+### Send USDC (ERC-20)
+
+These examples (in `eth-send-assets.js`) send USDC using Portal's enclave `assets/send` endpoint, which builds, signs, and broadcasts the ERC-20 transfer for you — no need to hand-build the transaction. The same endpoint and helper send any asset by changing the `token` argument (`NATIVE`, a shorthand like `USDC`/`USDT`, or a contract address) — see the `sendAsset` function.
+
+Two flows are demonstrated:
+
+- **Account Abstraction (gas sponsored).** Portal sponsors the gas, so the wallet does not need to hold any native token. This requires an AA client, so sign up with the `isAA` flag first:
+
+  ```bash
+  yarn signup isAA
+  yarn generate
+  yarn sendUsdcSponsored
+  ```
+
+- **Non-AA (wallet pays its own gas).** A standard wallet pays its own gas and **must hold the chain's native token** (e.g. Sepolia ETH). Without it, the request fails with an insufficient-balance error even when the wallet holds plenty of USDC.
+
+  ```bash
+  yarn signup
+  yarn generate
+  yarn sendUsdc
+  ```
+
+> **Note:** Make sure the wallet holds testnet USDC before sending (and, for the non-AA flow, some native gas). You can get testnet USDC from the [Circle faucet](https://faucet.circle.com/). If the `USDC` shorthand isn't supported on your target chain, pass the USDC contract address as the `token` instead.
+
 ### Yield.xyz Integration
 
 To run the Yield.xyz integration example, which demonstrates how to discover yields, enter a yield position, and check balances, use the following command:
@@ -177,6 +201,7 @@ yarn format
 - `backup.js`: Script for backing up MPC shares.
 - `recover.js`: Script for recovering MPC shares.
 - `eth-sign.js`: Script for signing Ethereum transactions.
+- `eth-send-assets.js`: Script for sending assets via the enclave `assets/send` endpoint — native tokens plus USDC, covering both the AA (gas sponsored) and non-AA (wallet pays gas) flows.
 - `sol-sign.js`: Script for signing Solana transactions.
 - `yieldxyz.js`: Script demonstrating Yield.xyz integration for discovering yields, entering positions, and checking balances.
 - `clientApiKey.txt`: File to store the client API key obtained during signup.

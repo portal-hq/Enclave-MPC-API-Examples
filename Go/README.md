@@ -63,6 +63,8 @@ Replace `<step>` with one of the following:
 - recover
 - signeth
 - signsol
+- sendUsdc
+- sendUsdcSponsored
 
 Below is a breakdown of each individual step.
 
@@ -120,6 +122,30 @@ You can also specify a fee payer address:
 make signsol ADDRESS=your_solana_address
 ```
 
+### Send USDC (ERC-20)
+
+These examples send USDC using Portal's enclave `assets/send` endpoint, which builds, signs, and broadcasts the ERC-20 transfer for you — no need to hand-build the transaction. The same endpoint works for any ERC-20 by changing the `usdcToken` constant (a shorthand like `USDC`/`USDT`, or a contract address) in `sendUsdc/sendUsdc.go`.
+
+Two flows are demonstrated:
+
+- **Account Abstraction (gas sponsored).** Portal sponsors the gas, so the wallet does not need to hold any native token. This requires an AA client, so set `IsAccountAbstracted: true` in `signup/signup.go` before running signup, then:
+
+  ```
+  make signup
+  make generate
+  make sendUsdcSponsored
+  ```
+
+- **Non-AA (wallet pays its own gas).** A standard wallet pays its own gas and **must hold the chain's native token** (e.g. Sepolia ETH). Without it, the request fails with an insufficient-balance error even when the wallet holds plenty of USDC.
+
+  ```
+  make signup
+  make generate
+  make sendUsdc
+  ```
+
+> **Note:** Make sure the wallet holds testnet USDC before sending (and, for the non-AA flow, some native gas). You can get testnet USDC from the [Circle faucet](https://faucet.circle.com/). If the `USDC` shorthand isn't supported on your target chain, set `usdcToken` in `sendUsdc/sendUsdc.go` to the USDC contract address instead.
+
 ## Additional Information
 
 ### Format the Code
@@ -145,6 +171,8 @@ gofmt -s -w .
 - `recover/recover.go`: Contains the implementation of the recover function.
 - `ethSign/ethSign.go`: Contains the implementation of the Ethereum signing function.
 - `solSign/solSign.go`: Contains the implementation of the Solana signing function.
+- `cmd/sendUsdc/main.go`: Script for running the USDC send function.
+- `sendUsdc/sendUsdc.go`: Contains the implementation of sending USDC via the enclave `assets/send` endpoint, covering both the AA (gas sponsored) and non-AA (wallet pays gas) flows.
 - `clientApiKey.txt`: File to store the client API key obtained during signup.
 - `shares.txt`: File to store the generated MPC shares.
 - `backupShares.txt`: File to store the backup MPC shares.
