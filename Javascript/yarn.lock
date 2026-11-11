@@ -1307,10 +1307,10 @@ bitcoin-sdk-js@^1.0.1:
     bech32 "^2.0.0"
     bs58 "^5.0.0"
 
-bitcoinjs-lib@^6.1.0:
-  version "6.1.7"
-  resolved "https://registry.yarnpkg.com/bitcoinjs-lib/-/bitcoinjs-lib-6.1.7.tgz#0f98dec1333d658574eefa455295668cfae38bb0"
-  integrity sha512-tlf/r2DGMbF7ky1MgUqXHzypYHakkEnm0SZP23CJKIqNY/5uNAnMbFhMJdhjrL/7anfb/U8+AlpdjPWjPnAalg==
+bitcoinjs-lib@^6.1.8:
+  version "6.1.8"
+  resolved "https://registry.yarnpkg.com/bitcoinjs-lib/-/bitcoinjs-lib-6.1.8.tgz#42664ada7470ef8253823418f0dc3ccd90699cc7"
+  integrity sha512-A6o+yq7BvwlmLj4F0NC5f3XX109rRe5evxi368S9zil5voOtUfiqfiMCzZYKHk4k7iIJ3+NmcQW05Ar4CBlKyg==
   dependencies:
     "@noble/hashes" "^1.2.0"
     bech32 "^2.0.0"
